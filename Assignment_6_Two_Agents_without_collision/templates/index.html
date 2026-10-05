@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedRoute — Multi-Agent Delivery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app">
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">MR</div>
+            <div>
+                <h1>MedRoute</h1>
+                <p>Hospital Delivery Coordination</p>
+            </div>
+        </div>
+
+        <div class="live">
+            <span></span>
+            SIMULATION ACTIVE
+        </div>
+    </header>
+
+    <section class="intro">
+        <div>
+            <div class="eyebrow">AGENTIC AI · ASSIGNMENT 06</div>
+            <h2>Two autonomous robots sharing hospital deliveries.</h2>
+            <p>
+                Atlas and Nova transport medicines and medical supplies through
+                the same hospital corridors while coordinating their movements
+                to prevent collisions.
+            </p>
+        </div>
+
+        <div class="controls">
+            <button id="autoBtn" class="primary">▶ Start</button>
+            <button id="stepBtn">Step</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <span>Deliveries</span>
+            <strong id="deliveries">0/6</strong>
+        </div>
+
+        <div class="stat">
+            <span>Simulation step</span>
+            <strong id="tick">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>Safe waits</span>
+            <strong id="waits">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>Active robots</span>
+            <strong>2</strong>
+        </div>
+    </section>
+
+    <section class="layout">
+
+        <div class="card map-card">
+            <div class="card-title">
+                <div>
+                    <h3>Hospital floor</h3>
+                    <p>Shared corridor environment</p>
+                </div>
+
+                <div class="legend">
+                    <span><i class="atlas"></i> Atlas</span>
+                    <span><i class="nova"></i> Nova</span>
+                    <span><i class="pickup"></i> Pickup</span>
+                    <span><i class="room"></i> Room</span>
+                </div>
+            </div>
+
+            <div id="map" class="map"></div>
+        </div>
+
+        <div class="side">
+
+            <div class="card">
+                <div class="card-title">
+                    <div>
+                        <h3>Robot status</h3>
+                        <p>Current task and decision</p>
+                    </div>
+                </div>
+
+                <div id="robots"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <div>
+                        <h3>Delivery queue</h3>
+                        <p>Shared workload</p>
+                    </div>
+                </div>
+
+                <div id="queue"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="card manual">
+        <div class="card-title">
+            <div>
+                <h3>Manual test</h3>
+                <p>Try a movement and observe the collision-safety rule.</p>
+            </div>
+        </div>
+
+        <div class="manual-grid">
+
+            <div class="manual-agent">
+                <strong>Atlas</strong>
+
+                <div class="dpad">
+                    <button data-robot="R1" data-action="UP">↑</button>
+                    <button data-robot="R1" data-action="LEFT">←</button>
+                    <button data-robot="R1" data-action="WAIT">•</button>
+                    <button data-robot="R1" data-action="RIGHT">→</button>
+                    <button data-robot="R1" data-action="DOWN">↓</button>
+                </div>
+            </div>
+
+            <div class="manual-agent">
+                <strong>Nova</strong>
+
+                <div class="dpad">
+                    <button data-robot="R2" data-action="UP">↑</button>
+                    <button data-robot="R2" data-action="LEFT">←</button>
+                    <button data-robot="R2" data-action="WAIT">•</button>
+                    <button data-robot="R2" data-action="RIGHT">→</button>
+                    <button data-robot="R2" data-action="DOWN">↓</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

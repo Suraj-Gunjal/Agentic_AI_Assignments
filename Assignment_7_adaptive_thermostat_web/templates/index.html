@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThermoMind — Learning Agent</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app-shell">
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">TM</div>
+            <div>
+                <h1>ThermoMind</h1>
+                <p>Adaptive learning thermostat</p>
+            </div>
+        </div>
+
+        <div class="status-pill">
+            <span class="pulse"></span>
+            Agent online
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <div class="eyebrow">AGENTIC AI LAB · ASSIGNMENT 07</div>
+                <h2>Teach the room to<br><span>find its comfort.</span></h2>
+                <p class="hero-copy">
+                    A learning agent observes the room, chooses an action,
+                    measures the result, and updates its knowledge after every step.
+                </p>
+            </div>
+
+            <div class="hero-controls">
+                <label>
+                    Target temperature
+                    <div class="target-input">
+                        <input id="targetInput" type="number" min="10" max="35" step="0.5" value="24">
+                        <span>°C</span>
+                    </div>
+                </label>
+                <button id="setTarget" class="primary-btn">Set target</button>
+            </div>
+        </section>
+
+        <section class="metrics-grid">
+            <article class="metric-card temperature-card">
+                <div class="metric-top">
+                    <span>ROOM TEMPERATURE</span>
+                    <span class="mini-icon">°</span>
+                </div>
+                <div id="temperature" class="big-number">19.0<span>°C</span></div>
+                <div class="metric-sub">
+                    <span id="tempStatus">Below comfort</span>
+                    <span id="tempDelta">+5.0°C to target</span>
+                </div>
+                <div class="temp-bar">
+                    <div id="tempMarker"></div>
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top">
+                    <span>TARGET</span>
+                    <span class="target-dot"></span>
+                </div>
+                <div id="target" class="big-number">24.0<span>°C</span></div>
+                <div class="metric-sub">Comfort setpoint</div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top">
+                    <span>ENERGY USED</span>
+                    <span class="energy-icon">⚡</span>
+                </div>
+                <div id="energy" class="big-number">0.0<span> units</span></div>
+                <div class="metric-sub">Lower is better</div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top">
+                    <span>SUCCESS RATE</span>
+                    <span class="success-icon">↗</span>
+                </div>
+                <div id="successRate" class="big-number">0<span>%</span></div>
+                <div class="metric-sub"><span id="stepCount">0</span> learning steps</div>
+            </article>
+        </section>
+
+        <section class="main-grid">
+
+            <article class="panel simulation-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="section-label">LIVE ENVIRONMENT</div>
+                        <h3>Room simulation</h3>
+                    </div>
+                    <div id="disturbance" class="disturbance">Stable environment</div>
+                </div>
+
+                <div class="room">
+                    <div class="room-grid"></div>
+
+                    <div class="window">
+                        <div class="window-sky"></div>
+                        <div class="window-line"></div>
+                        <div class="window-line vertical"></div>
+                    </div>
+
+                    <div class="thermostat-device">
+                        <div class="device-screen">
+                            <span>ROOM</span>
+                            <strong id="roomDisplay">19.0°</strong>
+                            <small>target <span id="deviceTarget">24.0°</span></small>
+                        </div>
+                    </div>
+
+                    <div class="plant">
+                        <div class="plant-leaf l1"></div>
+                        <div class="plant-leaf l2"></div>
+                        <div class="plant-leaf l3"></div>
+                        <div class="plant-pot"></div>
+                    </div>
+
+                    <div id="hvac" class="hvac idle">
+                        <div class="hvac-light"></div>
+                        <span id="hvacLabel">IDLE</span>
+                    </div>
+
+                    <div class="room-temp-label">
+                        <span>Current room</span>
+                        <strong id="roomTempLarge">19.0°C</strong>
+                    </div>
+                </div>
+
+                <div class="simulation-controls">
+                    <button id="autoBtn" class="primary-btn">▶ Run agent</button>
+                    <button id="stepBtn" class="secondary-btn">Step once</button>
+                    <button id="resetBtn" class="secondary-btn">Reset</button>
+                    <div class="speed-control">
+                        <label for="speed">Speed</label>
+                        <select id="speed">
+                            <option value="900">Slow</option>
+                            <option value="500" selected>Normal</option>
+                            <option value="220">Fast</option>
+                        </select>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel decision-panel">
+                <div class="section-label">AGENT BRAIN</div>
+                <h3>Current decision</h3>
+
+                <div class="decision-action">
+                    <div id="actionIcon" class="action-icon">—</div>
+                    <div>
+                        <span class="decision-caption">Selected action</span>
+                        <strong id="actionName">WAITING</strong>
+                    </div>
+                    <div class="confidence">
+                        <span>Confidence</span>
+                        <strong id="confidence">0%</strong>
+                    </div>
+                </div>
+
+                <div class="reason-box">
+                    <span>WHY THIS ACTION?</span>
+                    <p id="reason">Start the simulation and the agent will explain its decision.</p>
+                </div>
+
+                <div class="error-row">
+                    <div>
+                        <span>Temperature error</span>
+                        <strong id="error">+5.00°C</strong>
+                    </div>
+                    <div>
+                        <span>Latest reward</span>
+                        <strong id="reward">—</strong>
+                    </div>
+                </div>
+
+                <div class="decision-flow">
+                    <div class="flow-node active">OBSERVE</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node">DECIDE</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node">ACT</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node">LEARN</div>
+                </div>
+            </article>
+        </section>
+
+        <section class="lower-grid">
+            <article class="panel chart-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="section-label">PERFORMANCE</div>
+                        <h3>Temperature trajectory</h3>
+                    </div>
+                    <div class="legend">
+                        <span><i class="current-dot"></i> Temperature</span>
+                        <span><i class="target-line"></i> Target</span>
+                    </div>
+                </div>
+                <canvas id="chart" width="900" height="310"></canvas>
+            </article>
+
+            <article class="panel knowledge-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="section-label">LEARNED MODEL</div>
+                        <h3>Action knowledge</h3>
+                    </div>
+                </div>
+
+                <div class="knowledge-list" id="knowledgeList"></div>
+
+                <div class="learning-note">
+                    <span>●</span>
+                    The agent updates these values from real simulation feedback.
+                </div>
+            </article>
+        </section>
+
+        <section class="panel manual-panel">
+            <div>
+                <div class="section-label">EXPERIMENT MODE</div>
+                <h3>Manually perturb the environment</h3>
+                <p>Use an action yourself, then watch how the agent's knowledge changes.</p>
+            </div>
+
+            <div class="manual-actions">
+                <button data-action="HEAT" class="manual-btn heat">🔥 Heat</button>
+                <button data-action="COOL" class="manual-btn cool">❄ Cool</button>
+                <button data-action="FAN" class="manual-btn fan">◌ Fan</button>
+                <button data-action="IDLE" class="manual-btn idle-btn">○ Idle</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <span>ThermoMind · Learning Agent</span>
+        <span>Perception → Decision → Action → Feedback → Learning</span>
+    </footer>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
